@@ -1,0 +1,23 @@
+Tokenizar frases con CountVectorizer
+
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report, confusion_matrix
+
+path = r"C:\Users\Santiago\Downloads\reviews_sentiment.csv"
+df = pd.read_csv(path)
+
+vectorizer = CountVectorizer()
+X = vectorizer.fit_transform(df['review'])
+
+sums = X.sum(axis=0).A1
+words_freq = list(zip(vectorizer.get_feature_names_out(), sums))
+words_freq.sort(key=lambda x: x[1], reverse=True)
+
+top_words, top_counts = zip(*words_freq[:10])
+plt.barh(top_words, top_counts)
+plt.gca().invert_yaxis()
+plt.show()
