@@ -1,0 +1,76 @@
+Modelo LogisticRegression con metricas mostradas, grafico, vectorizacion con COuntVectorizer y analisis de nuevos Input
+
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report, confusion_matrix
+
+# ------------------------------------------------------
+# 1. Cargar el dataset
+# ------------------------------------------------------
+path = r"C:\Users\Santiago\Downloads\reviews_sentiment.csv"
+df = pd.read_csv(path)
+print(path)
+print(df.head())
+
+# ------------------------------------------------------
+# 2. Contar y graficar las palabras más comunes
+# ------------------------------------------------------
+vectorizer = CountVectorizer()
+X_counts = vectorizer.fit_transform(df['review'])
+
+# Sumamos la frecuencia total por palabra
+sums = X_counts.sum(axis=0).A1
+words_freq = list(zip(vectorizer.get_feature_names_out(), sums))
+words_freq.sort(key=lambda x: x[1], reverse=True)
+
+# Tomamos top 10
+top_words, top_counts = zip(*words_freq[:10])
+
+# Graficamos
+plt.figure(figsize=(8,5))
+plt.barh(top_words, top_counts)
+plt.gca().invert_yaxis()
+plt.title("Top 10 palabras más frecuentes")
+plt.show()
+
+# ------------------------------------------------------
+# 3. Vectorización del texto para el modelo
+# ------------------------------------------------------
+X = X_counts
+y = df['sentiment']
+
+# -----------------------------
+# ------------------------------------------------------
+# 4. Dividir en train y test
+# ------------------------------------------------------
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# ------------------------------------------------------
+# 5. Entrenar el modelo
+# ------------------------------------------------------
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+# ------------------------------------------------------
+# 6. Evaluar el modelo
+# ------------------------------------------------------
+y_pred = model.predict(X_test)
+print("\nMétricas sobre el conjunto de prueba:")
+print(classification_report(y_test, y_pred))
+print("Matriz de confusión:")
+print(confusion_matrix(y_test, y_pred))
+
+# ------------------------------------------------------
+# 7. Predicción interactiva
+# ------------------------------------------------------
+while True:
+    new_review = input("\nEscribí una review para analizar (o 'salir'): ")
+    if new_review.lower() == "salir":
+        break
+    new_vec = vectorizer.transform([new_review])
+    pred = model.predict(new_vec)[0]
+    resultado = "POSITIVA" if pred == 1 else "NEGATIVA"
+    print(f"Predicción: {resultado}")
