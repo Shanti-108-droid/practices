@@ -1,0 +1,39 @@
+Python puro, basico. Calculador de detalles de compra
+
+precios = {
+    'pan': 100,
+    'leche': 150,
+    'huevos': 300,
+    'queso': 500
+}
+
+compras = []
+
+while True:
+    nuevas_compras = input("Que va a llevar hoy?(o 'salir') ")
+    if nuevas_compras == "salir":
+        break
+    producto, cantidad = nuevas_compras.split()
+    cantidad = int(cantidad)
+    compras.append((producto, cantidad))
+
+total_a_pagar = 0
+print("Detalle de la compra:")
+for producto, cantidad in compras:
+    precio_unitario = precios[producto]
+    subtotal = precio_unitario * cantidad
+    print(f"- {producto} x{cantidad} a {precio_unitario} = {subtotal}")
+    total_a_pagar += subtotal
+
+print(f"Total a pagar: {total_a_pagar}")
+
+
+CONTADOR DE PALABRAS UNICAS EN FRASE
+
+entrada = input("Ingresa la frase a analizar: ")
+palabras = entrada.lower().split()
+palabras_unicas = set(palabras)
+print(f"Palabras unicas: {len(palabras_unicas)}")
+for palabra in palabras_unicas:
+    print(f'{palabra}: {palabras.count(palabra)}')
+
