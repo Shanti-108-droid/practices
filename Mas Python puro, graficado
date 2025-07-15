@@ -1,0 +1,36 @@
+entrada = input("Ingrese su lista a analizar: ")
+numeros = entrada.split()
+numeros = list(map(int, numeros))
+print(f"El numero mas alto es {max(numeros)}")
+print(f"El numero mas bajo es {min(numeros)}")
+promedio = sum(numeros)/len(numeros)
+print(f"El promeido es {promedio}")
+mayores = [n > promedio for n in numeros]
+print(f"Estos numeros son mayores al promedio {mayores}")
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+
+import matplotlib.pyplot as plt
+from collections import Counter
+
+entrada = input(f'Ingrese las edades a analizar: ')
+edades = list(map(int, entrada.split()))
+print(f'La edad minima es {min(edades)}')
+print(f'La edad maxima es {max(edades)}')
+promedio = sum(edades)/len(edades)
+print(f'El promedio de edad es de {promedio}')
+menores = len([n for n in edades if n < 18])
+print(f'Hay {menores} perosnas menores de 18 anios.')
+adultos = len([n for n in edades if n >= 18 and n <= 65 ])
+print(f'Hay {adultos} personas adultas.')
+mayores = len([n for n in edades if n > 65])
+print(f'Hay {mayores} perosnas mayores de 65 anios.')
+
+conteo = Counter(edades)
+edad, personas = zip(*conteo.items())
+plt.figure(figsize=(8,5))
+plt.barh(edad, personas)
+plt.title('Edades x personas')
+plt.show()
