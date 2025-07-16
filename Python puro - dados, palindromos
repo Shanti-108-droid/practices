@@ -1,0 +1,19 @@
+### Detectar palindromos ***
+
+
+entrada = input(f'Ingresa tu frase: ')
+entrada_limpia = entrada.lower().replace(" ", "")
+if entrada_limpia == entrada_limpia[::-1]:
+    print("Es palindromo")
+else:
+    print("No es palindromo")
+
+
+### Un dado de 6 caras con 50% mas peso en el numero 6 ***
+
+import random
+from collections import Counter
+
+dado = random.choices([1,2,3,4,5,6], weights=[1,1,1,1,1,2], k=1000)
+conteo = Counter(dado)
+print(f"Esta es la cantidad de veces que salio cada numero: {conteo}")
