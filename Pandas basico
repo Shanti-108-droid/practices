@@ -1,0 +1,22 @@
+# ****  Crear columna y agrupar y calcular  y mostrar Nombre(idxmax) de los maximos
+
+
+import pandas as pd
+from io import StringIO
+
+data = """fecha,producto,cantidad,precio_unitario
+2024-01-01,cable,5,120
+2024-01-02,canilla,2,350
+2024-01-02,cable,1,120
+2024-01-03,tanque,1,4200
+2024-01-03,cable,3,120
+2024-01-04,canilla,4,350"""
+
+
+df = pd.read_csv(StringIO(data))
+df["total_venta"] = df['cantidad']*df['precio_unitario']
+total_vendido_p_producto = df.groupby('producto')['cantidad'].sum()
+mas_vendido = total_vendido_p_producto.max()
+print(f'EL producto mas vendido fue: {mas_vendido}.')
+mas_ingresos = df.groupby('producto')['total_venta'].sum()
+print(f'El producto que genero mayor ingreso de dinero es {mas_ingresos.max()}')
