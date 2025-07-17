@@ -1,0 +1,19 @@
+#  ***   Contador de frecuencia con Counter, separando str en letras 
+
+from collections import Counter
+
+entrada = input(f'INgresa una palabra ')
+letras = list(entrada)
+conteo = Counter(letras)
+
+letra_mas_frecuente, cantidad = conteo.most_common(1)[0]
+                                                    
+print(f'La letra mas frecuente es {letra_mas_frecuente} y aparece un total de {cantidad} veces.')
+
+
+
+
+#   ****  Invertir un Input ingresado
+
+numero = input(f'Ingresa un numero ')
+print(numero[::-1])
