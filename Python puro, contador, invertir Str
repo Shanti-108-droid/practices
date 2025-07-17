@@ -17,3 +17,17 @@ print(f'La letra mas frecuente es {letra_mas_frecuente} y aparece un total de {c
 
 numero = input(f'Ingresa un numero ')
 print(numero[::-1])
+
+
+
+# *** Sumar solo los digitoa pares de un numero mas grande con una comprehension list
+
+from collections import Counter
+
+contador = 0
+for n in range(1, 200):
+    suma_d = sum(int(d) for d in str(n) if int(d) % 2 == 0)
+    if suma_d > 5:
+        contador += 1
+        print(f'El total dio {suma_d} y son {contador} los que cumplieron la condicion.')
+        
