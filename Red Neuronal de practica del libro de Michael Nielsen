@@ -1,0 +1,49 @@
+##### **** Importo el Data Set de digitos hechos a mano (son 60.000 muestras de digitos hechos a mano por grupos de estudiantes
+### ***  y creo que militares o algo asi. dentro del codigo del loader esta especificado que se usan 50.000 para entrenamiento 
+### ***y 10.000 para validacion del modelo)
+
+import mnist_loader
+>>> training_data, validation_data, test_data = \
+... mnist_loader.load_data_wrapper()
+
+### ***  Importo la Red hecha manualmente por Nielsen que descargue y guarde en un archivo de notas y guarde con extension .py
+### ***  Seteo los parametros de la red (primer capa de neuronas de 784 inputs -cada imagen tiene 28x28 pixeles = 784, una entrada 
+### ***  para cada pixel, que es el que le dara la informacion a la red junto a la salida-. segunda capa de 30 y la ultima todos 
+### ***  los digitos del 0 al 9 = 10 numeros, 10 neuronas output, todas van a dar cero menos la que indica e numero predicho que da 1)
+
+ import network
+>>> net = network.Network([784, 30, 10])
+
+### ***  Se pasan los datos porla red. Los parametros son: 30 epochs (iteraciones ida y vuelta de los datos, con sus respectivas 
+### ***  modificaciones), 10 es el mini-batch, la cantidad de ejemplos de los datos que pasan por la red antes de ser actualizada 
+### ***  internamente, y 3.0 es el Learning Rate, indica un numero fijo que usa la red para mover los pesos internos de cada neurona 
+### ***  en direccion al gradiente calculado en las iteraciones de los datos.
+### ***  SGD (Stochastic Gradient Descent) es el metodo que utilizan casi todas las NN y este algoritmo de Nielsen.
+
+net.SGD(training_data, 30, 10, 3.0, test_data=test_data)
+
+### *** Al ejecutar esto se entrena la red iteracion por iteracion (30 veces) y devuelve un porcentaje de efectividad actualizandose 
+### *** en cada epoch. A mi me dio "Época 29: 8591 / 10000" en la ultima. Este numero varia en cad entrenamiento porque los mini_batch 
+### *** escogidos aleatoriamente varian.
+
+### *** A continuacion muestro el codigo con el que cargue una imagen de prueba de un numero 7 hecho con GPT y como ejecutar 
+### *** la prediccion del modelo:
+
+
+import numpy as np
+from PIL import Image
+
+# Cargar imagen (asegurate que está en el mismo directorio con ese nombre)
+img = img = Image.open("numero7.png").convert("L")
+
+img = img.resize((28, 28))  # Tamaño 28x28
+img_data = 255 - np.asarray(img)  # Invertir: fondo negro, número blanco
+
+# Normalizar y convertir a vector columna
+img_vector = img_data.reshape(784, 1) / 255.0
+
+# Usar red ya entrenada en memoria
+output = net.feedforward(img_vector)
+prediccion = np.argmax(output)
+
+print("La red predice que es:", prediccion)
