@@ -1,0 +1,74 @@
+# ****  Crear columna y agrupar y calcular  y mostrar Nombre(idxmax) de los maximos
+
+
+import pandas as pd
+from io import StringIO
+
+data = """fecha,producto,cantidad,precio_unitario
+2024-01-01,cable,5,120
+2024-01-02,canilla,2,350
+2024-01-02,cable,1,120
+2024-01-03,tanque,1,4200
+2024-01-03,cable,3,120
+2024-01-04,canilla,4,350"""
+
+
+df = pd.read_csv(StringIO(data))
+df["total_venta"] = df['cantidad']*df['precio_unitario']
+total_vendido_p_producto = df.groupby('producto')['cantidad'].sum()
+mas_vendido = total_vendido_p_producto.max()
+print(f'EL producto mas vendido fue: {mas_vendido}.')
+mas_ingresos = df.groupby('producto')['total_venta'].sum()
+print(f'El producto que genero mayor ingreso de dinero es {mas_ingresos.max()}')
+
+
+
+## *** Filtrado de ventas
+
+
+import pandas as pd
+from io import StringIO
+
+data = """fecha,producto,cantidad,precio_unitario
+2024-01-01,cable,5,120
+2024-01-02,tornillo,2,50
+2024-01-03,tuerca,4,80
+2024-01-04,cable,1,120
+2024-01-05,tornillo,6,50
+"""
+
+df = pd.read_csv(StringIO(data))
+df_filtrado = df[df['cantidad'] > 3]
+df_filtrado['total'] = df_filtrado['cantidad'] * df_filtrado['precio_unitario']
+total_x_producto = df_filtrado.groupby('producto')['total'].sum()
+vendidas = df_filtrado.groupby('producto')['cantidad'].sum()
+print(f'El total acumulado por producto es de {total_x_producto}.')
+print(f'Se vendieron un total de {vendidas}.')
+
+
+### *** Mismo que arriba pero con funcion agg()
+
+
+import pandas as pd
+from io import StringIO
+
+data = """fecha,producto,cantidad,precio_unitario
+2024-01-01,cable,5,120
+2024-01-02,tornillo,2,50
+2024-01-03,tuerca,4,80
+2024-01-04,cable,1,120
+2024-01-05,tornillo,6,50
+"""
+
+df = pd.read_csv(StringIO(data))
+df['total'] = df['precio_unitario'] * df['cantidad']
+
+practicas = df.groupby('producto').agg({'cantidad': ['sum', 'mean'], 'total': 'max'})
+practicas.columns = ['cantidad_sum', 'cantidad_mean', 'total_max']
+### Opcion para automatizar el renombrado de columnas:  ###
+### practicas.columns = ['_'.join(col) for col in practicas.columns]   ###
+
+print(practicas)
+
+
+
