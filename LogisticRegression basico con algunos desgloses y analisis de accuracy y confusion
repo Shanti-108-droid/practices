@@ -1,0 +1,54 @@
+#### ***  Modelo de Regresion Logistica de scikitlearn con muestra de efectividad y matriz de confusion
+
+
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, confusion_matrix
+
+data = [
+    ("Muy bueno, me encantó", 1),
+    ("Es excelente, lo volvería a comprar", 1),
+    ("Horrible, no sirve para nada", 0),
+    ("Pésimo, una estafa", 0),
+    ("Muy recomendable", 1),
+    ("No me gustó, mala calidad", 0),
+    ("Funciona perfecto, súper feliz", 1),
+    ("Un desastre, vino roto", 0),
+    ("Cumple con lo prometido", 1),
+    ("No era lo que esperaba", 0),
+]
+
+X = [frase for frase, etiqueta in data]
+y = [etiqueta for frase, etiqueta in data]
+
+vectorizer = CountVectorizer()
+X_vectorizado = vectorizer.fit_transform(X)
+
+X_train, X_test, y_train, y_test = train_test_split(X_vectorizado, y, test_size=0.3, random_state=42)
+
+modelo = LogisticRegression()
+modelo.fit(X_train, y_train)
+y_pred = modelo.predict(X_test)
+
+print('Accuracy', accuracy_score(y_test, y_pred))
+print('Matriz de confusion:')
+print(confusion_matrix(y_test, y_pred))
+
+frase_nueva = ["esto es excelente"]
+frase_vec = vectorizer.transform(frase_nueva)
+prediccion =modelo.predict(frase_vec)
+print('Prediccion', prediccion[0])
+
+## ** Mostrar las palabras que entraron en el modelo, que recibieron pesos
+
+print(vectorizer.get_feature_names_out())
+
+## ** Analisis del peso de la palabra excelente dentro del modelo
+import numpy as np
+
+palabras = vectorizer.get_feature_names_out()
+coef = modelo.coef_[0]
+
+indice = np.where(palabras == 'excelente')[0][0]
+print('Peso de la palabra "excelente":', round(coef[indice], 2))
