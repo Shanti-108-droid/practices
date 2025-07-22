@@ -1,0 +1,30 @@
+### ***  Filtrar valores y tipo con Python puro
+
+edades = [25, -3, 130, 42, 0, 119, 300, "15", 85]
+
+edades_corregidas = []
+
+for i in edades:
+    if isinstance(i, int):
+        if i >= 0 and i <=120:
+            edades_corregidas.append(i)
+
+print(edades_corregidas)
+
+
+### ***  Igual pero con contador en un diccionario
+
+edades = [25, 42, "42", -1, 25, 119, 42, "no sé", 130, 0, 119, 119, 42]
+
+dicc = {}
+
+for i in edades:
+    if isinstance(i, int):
+        if i >=0 and i <= 120:
+            if i in dicc:
+                dicc[i] += 1
+            else:
+                dicc[i] = 1
+
+     
+print(dicc)
