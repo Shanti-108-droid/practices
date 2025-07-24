@@ -1,0 +1,57 @@
+### ***  Simulacion de temperatura de cada dia del año, calculo promedio y paso a dataframe con pandas para agregar fila 
+### ***  de cada dia correspondiente a la temperatura, graficamos con los puntos masfrios, mas calientes, el promedio e imprimimos datos.
+
+
+import numpy as np
+import pandas as pd
+
+dias = np.arange(1, 366)
+
+base = 20
+amplitud = 10
+desfase = 80
+
+ruido = np.random.normal(0, 2, size=365)
+
+temp = base+amplitud * np.sin(2 * np.pi * (dias - desfase)/365) + ruido
+
+df = pd.DataFrame({'Dia': np.arange(1,366), 'Temperatura': temp})
+print(df)
+
+import matplotlib.pyplot as plt
+
+# Promedio anual
+media = df['Temperatura'].mean()
+
+# 5 días más calurosos y más fríos
+top5 = df.nlargest(5, 'Temperatura')
+bottom5 = df.nsmallest(5, 'Temperatura')
+
+# Gráfico
+plt.figure(figsize=(12, 5))
+plt.plot(df['Dia'], df['Temperatura'], label='Temperatura diaria', color='blue')
+
+# Línea horizontal con el promedio
+plt.axhline(y=media, color='gray', linestyle='--', label=f'Promedio anual: {media:.2f}°C')
+
+# Puntos extremos
+plt.scatter(top5['Dia'], top5['Temperatura'], color='red', label='Top 5 más calurosos')
+plt.scatter(bottom5['Dia'], bottom5['Temperatura'], color='cyan', label='Top 5 más fríos')
+
+# Estética
+plt.title('Temperatura diaria simulada - Año completo')
+plt.xlabel('Día del año')
+plt.ylabel('Temperatura (°C)')
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+
+print(f'La temperatura media anual fue de {np.mean(temp)}°C')
+
+dia_max = df.loc[df['Temperatura'].idxmax()]
+dia_min = df.loc[df['Temperatura'].idxmin()]
+
+print(f"El dia mas caluroso fue el {int(dia_max['Dia'])} con {dia_max['Temperatura']:.2f} °C")
+print(f"El dia mas frio fue el {int(dia_min['Dia'])} con {dia_min['Temperatura']:.2f} °C") 
